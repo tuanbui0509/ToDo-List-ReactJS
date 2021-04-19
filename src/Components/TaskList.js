@@ -29,6 +29,9 @@ class TaskList extends Component {
                     <td />
                   </tr>
                   <TaskItem/>
+                  <TaskItem/>
+                  <TaskItem/>
+                  <TaskItem/>
                 </tbody>
               </table>
             
