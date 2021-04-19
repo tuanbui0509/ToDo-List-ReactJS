@@ -60,6 +60,7 @@
 .text-right {
   float: right;
   cursor: pointer;
+  
 }
 
 .text-right:hover {
@@ -73,4 +74,8 @@
   font-style: normal;
   margin: 0px 0px 0px 10px;
   display: inline-block;
+}
+
+span.label{
+  cursor: pointer;
 }
