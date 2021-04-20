@@ -24,29 +24,6 @@ class App extends Component {
     }
   }
 
-  onTestData = () => {
-    let tasks = [
-      {
-        id: this.generateID(),
-        name: 'Học lập trình C++',
-        status: true
-      },
-      {
-        id: this.generateID(),
-        name: 'Học lập trình Java',
-        status: true
-      },
-      {
-        id: this.generateID(),
-        name: 'Học lập trình .NET',
-        status: false
-      }
-    ]
-
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-
-  }
-
   s4() {
     return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
   }
@@ -64,12 +41,25 @@ class App extends Component {
   onCloseForm = () => {
     this.setState({
       isDisplayForm: !this.state.isDisplayForm
-    })
+    });
+  }
+
+  onSubmit = (task) => {
+    let { tasks } = this.state;
+    task.id = this.generateID();
+    tasks.push(task);
+    this.setState({
+      tasks: tasks
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
   }
 
   render() {
     let { tasks, isDisplayForm } = this.state; //let tasks = this.state.tasks
-    let elmTaskForm = isDisplayForm ? <TaskForm onCloseForm={this.onCloseForm} /> : '';
+    let elmTaskForm = isDisplayForm ? <TaskForm
+      onCloseForm={this.onCloseForm}
+      onSubmit={this.onSubmit}
+    /> : '';
 
 
 
