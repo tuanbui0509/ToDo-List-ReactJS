@@ -194,8 +194,8 @@ class App extends Component {
 
     } else {
       tasks.sort((a, b) => {
-        if (a.name > b.name) return sortValue;
-        else if (a.name < b.name) return - sortValue;
+        if (a.status < b.status) return sortValue;
+        else if (a.status > b.status) return - sortValue;
         else return 0;
       });
     }

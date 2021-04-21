@@ -1,2 +1,2 @@
 # Todo-List-ReactJS
-link demo: http://jealous-playground.surge.sh/
+link demo: http://todo-app-reactjs.surge.sh/
