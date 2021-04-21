@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import TaskForm from './Components/TaskForm'
-import Control from './Components/Control'
+import TaskControl from './Components/TaskControl'
 import TaskList from './Components/TaskList';
 import './App.css';
-
+import _ from 'lodash'
 class App extends Component {
 
   constructor(props) {
@@ -12,11 +12,14 @@ class App extends Component {
       tasks: [], //id:unique,name,status
       isDisplayForm: false,
       taskEditing: null,
+      sortBy: 'name',
+      sortValue: 1,
       filter: {
         name: '',
         status: -1
       },
-      
+      keyWord: ''
+
     }
   }
 
@@ -106,7 +109,11 @@ class App extends Component {
 
   onDeleteTodo = (id) => {
     let { tasks } = this.state;
-    let index = this.findIndex(id);
+    // let index = this.findIndex(id);
+    let index = _.findIndex(tasks,(task)=>{
+      return task.id === id;
+    });
+    console.log(index);
     if (index !== -1)
       tasks.splice(index, 1);
     this.setState({
@@ -136,10 +143,26 @@ class App extends Component {
       }
     })
   }
+  searchKeyWord = (keyWord) => {
+    this.setState({
+      keyWord: keyWord
+    })
+  }
+
+  onSort = (sortBy, sortValue) => {
+    this.setState({
+      sortBy: sortBy,
+      sortValue, sortValue
+    })
+  }
 
   render() {
-    let { tasks, isDisplayForm, taskEditing, filter } = this.state; //let tasks = this.state.tasks
-    console.log(filter)
+    let { tasks, isDisplayForm, taskEditing, filter, keyWord, sortBy, sortValue } = this.state; //let tasks = this.state.tasks
+    if (keyWord) {
+      tasks = tasks.filter((task) => {
+        return task.name.toLowerCase().indexOf(keyWord) !== -1;
+      });
+    }
     if (filter) {
       if (filter.name) {
         tasks = tasks.filter((task) => {
@@ -156,6 +179,27 @@ class App extends Component {
         }
       });
     }
+
+    if (sortBy === 'name') {
+      // if (sortValue === 1) {
+      //   tasks.reverse();
+      // }else{
+      //   tasks.sort();
+      // }
+      tasks.sort((a, b) => {
+        if (a.name < b.name) return sortValue;
+        else if (a.name > b.name) return -sortValue;
+        else return 0;
+      });
+
+    } else {
+      tasks.sort((a, b) => {
+        if (a.name > b.name) return sortValue;
+        else if (a.name < b.name) return - sortValue;
+        else return 0;
+      });
+    }
+
     let elmTaskForm = isDisplayForm ?
       <TaskForm
         onCloseForm={this.onCloseForm}
@@ -182,7 +226,12 @@ class App extends Component {
               <span className="fa fa-plus mr-5" />Thêm Công Việc
         </button>
 
-            <Control />
+            <TaskControl
+              searchKeyWord={this.searchKeyWord}
+              onSort={this.onSort}
+              sortBy={sortBy}
+              sortValue={sortValue}
+            />
             <div className="row mt-15">
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <TaskList
