@@ -11,7 +11,12 @@ class App extends Component {
     this.state = {
       tasks: [], //id:unique,name,status
       isDisplayForm: false,
-      taskEditing: null
+      taskEditing: null,
+      filter: {
+        name: '',
+        status: -1
+      },
+      
     }
   }
 
@@ -62,7 +67,7 @@ class App extends Component {
 
   onSubmit = (task) => {
     let { tasks } = this.state;
-    if (task.id == '') {
+    if (task.id === '') {
       // Adding
       task.id = this.generateID();
       tasks.push(task);
@@ -122,13 +127,41 @@ class App extends Component {
     this.onShowForm();
   }
 
+  onChangeFilter = (filterName, filterStatus) => {
+    filterStatus = parseInt(filterStatus, 10);
+    this.setState({
+      filter: {
+        name: filterName.toLowerCase(),
+        status: filterStatus
+      }
+    })
+  }
+
   render() {
-    let { tasks, isDisplayForm, taskEditing } = this.state; //let tasks = this.state.tasks
-    let elmTaskForm = isDisplayForm ? <TaskForm
-      onCloseForm={this.onCloseForm}
-      onSubmit={this.onSubmit}
-      taskEditing={taskEditing}
-    /> : '';
+    let { tasks, isDisplayForm, taskEditing, filter } = this.state; //let tasks = this.state.tasks
+    console.log(filter)
+    if (filter) {
+      if (filter.name) {
+        tasks = tasks.filter((task) => {
+          return task.name.toLowerCase().indexOf(filter.name) !== -1;
+        });
+      }
+
+      tasks = tasks.filter((task) => {
+        if (filter.status === -1) {
+          return task;
+        }
+        else {
+          return task.status === (filter.status === 1 ? true : false);
+        }
+      });
+    }
+    let elmTaskForm = isDisplayForm ?
+      <TaskForm
+        onCloseForm={this.onCloseForm}
+        onSubmit={this.onSubmit}
+        taskEditing={taskEditing}
+      /> : '';
     return (
       <div className="container">
         <div className="text-center">
@@ -157,7 +190,7 @@ class App extends Component {
                   onUpdateStatus={this.onUpdateStatus}
                   onDeleteTodo={this.onDeleteTodo}
                   onUpdateToDo={this.onUpdateToDo}
-
+                  onChangeFilter={this.onChangeFilter}
                 ></TaskList>
               </div>
             </div>

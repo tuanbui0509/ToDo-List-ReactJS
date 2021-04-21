@@ -4,6 +4,7 @@ class TaskForm extends Component {
 
     constructor(props) {
         super(props);
+        // data of new or old task
         this.state = {
             id: '',
             name: '',
@@ -27,6 +28,7 @@ class TaskForm extends Component {
     }
 
     onSubmit = (event) => {
+        //unload website
         event.preventDefault();
         this.props.onSubmit(this.state);
 
@@ -42,6 +44,7 @@ class TaskForm extends Component {
         })
     }
     componentWillMount() {
+        //if exits taskEditing update data
         if (this.props.taskEditing) {
             this.setState({
                 id: this.props.taskEditing.id,
@@ -52,6 +55,7 @@ class TaskForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        // taskEditing exit replace data
         if (nextProps && nextProps.taskEditing) {
             this.setState({
                 id: nextProps.taskEditing.id,
@@ -59,6 +63,7 @@ class TaskForm extends Component {
                 status: nextProps.taskEditing.status,
             })
         }
+        // taskEditing not exit then create new todo
         else if(!nextProps.taskEditing){
             this.setState({
                 id: '',
